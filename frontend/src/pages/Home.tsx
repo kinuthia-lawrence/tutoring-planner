@@ -31,7 +31,6 @@ const subjects = [
     color: "bg-blue-50 text-blue-900 border border-blue-200",
   },
 ];
-
 const features = [
   {
     title: "Live 1:1 Sessions",
@@ -52,7 +51,6 @@ const features = [
     icon: <FaChartLine className="text-blue-700 text-2xl mb-2" />,
   },
 ];
-
 const Home: React.FC = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -68,7 +66,6 @@ const Home: React.FC = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
-
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     // ... logic
