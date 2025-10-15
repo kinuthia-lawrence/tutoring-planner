@@ -96,18 +96,23 @@ const Home: React.FC = () => {
           <a
             href="/dashboard"
             className="text-black font-medium hover:text-blue-700"
+            title="Go to Dashboard"
           >
             Dashboard
           </a>
         </div>
         {/* End: Book Session and Sign In */}
         <div className="hidden md:flex md:w-1/3 justify-end gap-4">
-          <button className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold">
+          <button
+            onClick={() => handleOpenModal("signin")}
+            className="text-black px-6 py-2 rounded font-semibold border-[.5px] border-gray-300 hover:border-purple-400"
+          >
             Book Session
           </button>
           <button
             className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
             onClick={() => handleOpenModal("signin")}
+            title="Sign in to your account"
           >
             Sign In
           </button>
@@ -120,28 +125,38 @@ const Home: React.FC = () => {
           <a
             href="/dashboard"
             className="text-black font-medium hover:text-blue-700"
+            title="Go to Dashboard"
           >
             Dashboard
           </a>
-          <button className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold">
+          <a
+            href="/dashboard"
+            className="text-black font-medium hover:text-blue-700"
+          >
+            Dashboard
+          </a>
+          <button
+            className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold"
+            onClick={() => handleOpenModal("signin")}
+          >
             Book Session
           </button>
           <button
             className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
             onClick={() => handleOpenModal("signin")}
+            title="Sign in to your account"
           >
             Sign In
           </button>
         </div>
       </nav>
-
       {/* Body */}
-      <main className="flex-1 w-full px-4 py-6 md:py-2 max-w-7xl mx-auto">
+      <main className="flex-1 w-full px-4 py-12 md:py-2 max-w-7xl mx-auto">
         {/* Section 1 */}
-        <section className="flex flex-col md:flex-row gap-8 md:gap-4 items-center mb-10 md:mb-4 min-h-[60vh] md:min-h-[50vh]">
+        <section className="flex flex-col md:flex-row gap-8 md:gap-4 items-center mb-5 md:mb-4 min-h-[60vh] md:min-h-[50vh]">
           {/* Column 1 */}
-          <div className="flex-1 flex flex-col gap-4 md:gap-2 max-w-xl">
-            <h1 className="text-3xl md:text-2xl font-extrabold text-black">
+          <div className="flex-1 flex flex-col gap-4 md:gap-2 max-w-3xl">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-black">
               Personalized online tutoring that adapts to you
             </h1>
             <p className="text-lg md:text-base text-gray-700">
@@ -150,12 +165,16 @@ const Home: React.FC = () => {
               languages and more.
             </p>
             <div className="flex gap-4 flex-wrap">
-              <button className="bg-blue-700 text-white px-6 py-2 rounded font-semibold hover:bg-blue-800">
+              <button
+                className="bg-purple-600 text-white px-6 py-2 rounded font-semibold hover:bg-purple-800"
+                onClick={() => handleOpenModal("signin")}
+              >
                 Find a Tutor
               </button>
               <button
-                className="bg-purple-700 text-white px-6 py-2 rounded font-semibold hover:bg-purple-800"
+                className=" text-black px-6 py-2 rounded font-semibold border-[.5px] border-gray-300 hover:border-purple-400"
                 onClick={() => handleOpenModal("signin")}
+                title="Sign in or sign up"
               >
                 Sign In / Sign Up
               </button>
@@ -199,17 +218,19 @@ const Home: React.FC = () => {
         <button
           className="fixed bottom-12 right-4 z-50 bg-purple-700 text-white p-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-purple-800 focus:outline-none"
           aria-label="Open AI Assistant"
+          title="Open AI Assistant"
         >
           <FaRobot className="text-sm" /> Study with Nova
         </button>
         {/* Auth Modal */}
         {showAuthModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative p-8 border-2 border-blue-100">
               <button
                 className="absolute top-4 right-4 text-gray-400 hover:text-purple-700 transition"
                 onClick={handleCloseModal}
                 aria-label="Close"
+                title="Close"
               >
                 <FaTimes className="text-2xl" />
               </button>
@@ -229,6 +250,7 @@ const Home: React.FC = () => {
                         : "bg-gray-50 text-blue-700 hover:bg-blue-50"
                     }`}
                     onClick={() => setAuthTab("signin")}
+                    title="Switch to Sign In tab"
                   >
                     Sign In
                   </button>
@@ -239,6 +261,7 @@ const Home: React.FC = () => {
                         : "bg-gray-50 text-purple-700 hover:bg-purple-50"
                     }`}
                     onClick={() => setAuthTab("signup")}
+                    title="Switch to Sign Up tab"
                   >
                     Sign Up
                   </button>
@@ -252,6 +275,7 @@ const Home: React.FC = () => {
                     </label>
                     <input
                       type="email"
+                      title="Email"
                       className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-200 focus:outline-none transition"
                       placeholder="Enter your email"
                     />
@@ -262,6 +286,7 @@ const Home: React.FC = () => {
                     </label>
                     <input
                       type="password"
+                      title="Password"
                       className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-200 focus:outline-none transition"
                       placeholder="Enter your password"
                     />
@@ -281,6 +306,7 @@ const Home: React.FC = () => {
                     </label>
                     <input
                       type="email"
+                      title="Email"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Enter your email"
                     />
@@ -291,6 +317,7 @@ const Home: React.FC = () => {
                     </label>
                     <input
                       type="password"
+                      title="Password"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Create a password"
                     />
@@ -301,6 +328,7 @@ const Home: React.FC = () => {
                     </label>
                     <input
                       type="password"
+                      title="Confirm Password"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Confirm your password"
                     />
@@ -310,6 +338,7 @@ const Home: React.FC = () => {
                       Role
                     </label>
                     <input
+                      title="Role"
                       type="text"
                       value="student"
                       readOnly
@@ -328,7 +357,6 @@ const Home: React.FC = () => {
           </div>
         )}
       </main>
-
       {/* Features, Pricing, FAQ Sections (scrollable) */}
       <section id="pricing" className="w-full px-4 py-12 max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-blue-700 mb-6">Pricing</h2>
@@ -427,18 +455,29 @@ const Home: React.FC = () => {
           ))}
         </ul>
       </section>
-
       {/* Sticky Footer */}
       <footer className="w-full border-t border-gray-200 px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between bg-white text-black sticky bottom-0 left-0 z-40">
         <div className="text-sm">&copy; 2025 TutorNova, Inc.</div>
         <div className="hidden md:flex md:w-1/2 justify-end gap-6 mt-2 md:mt-0">
-          <a href="#features" className="hover:text-blue-700">
+          <a
+            href="#features"
+            className="hover:text-blue-700"
+            title="View Features section"
+          >
             Features
           </a>
-          <a href="#pricing" className="hover:text-blue-700">
+          <a
+            href="#pricing"
+            className="hover:text-blue-700"
+            title="View Pricing section"
+          >
             Pricing
           </a>
-          <a href="#faq" className="hover:text-blue-700">
+          <a
+            href="#faq"
+            className="hover:text-blue-700"
+            title="View Frequently Asked Questions"
+          >
             FAQ
           </a>
         </div>
