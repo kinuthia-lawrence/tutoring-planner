@@ -6,6 +6,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { MdOutlineSmartToy } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const subjects = [
   {
@@ -53,12 +54,37 @@ const features = [
 
 const Home: React.FC = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
-  const handleOpenModal = (tab: "signin" | "signup") => {
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
+  const handleCloseModal = () => setShowAuthModal(false);
+  const handleOpenModal = (tab: "signin" | "signup", redirectTo?: string) => {
     setAuthTab(tab);
     setShowAuthModal(true);
+    if (redirectTo) setRedirectPath(redirectTo);
   };
-  const handleCloseModal = () => setShowAuthModal(false);
+  const navigate = useNavigate();
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    // ... logic
+    setIsAuthenticated(true);
+    setShowAuthModal(false);
+    if (redirectPath) {
+      navigate(redirectPath);
+      setRedirectPath(null);
+    }
+  };
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    // ... logic
+    setIsAuthenticated(true);
+    setShowAuthModal(false);
+    if (redirectPath) {
+      navigate(redirectPath);
+      setRedirectPath(null);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -94,8 +120,15 @@ const Home: React.FC = () => {
             Home
           </a>
           <a
-            href="/dashboard"
-            className="text-black font-medium hover:text-blue-700"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (isAuthenticated) {
+                navigate("/dashboard");
+              } else {
+                handleOpenModal("signin", "/dashboard");
+              }
+            }}
             title="Go to Dashboard"
           >
             Dashboard
@@ -104,7 +137,13 @@ const Home: React.FC = () => {
         {/* End: Book Session and Sign In */}
         <div className="hidden md:flex md:w-1/3 justify-end gap-4">
           <button
-            onClick={() => handleOpenModal("signin")}
+            onClick={() => {
+              if (isAuthenticated) {
+                navigate("/dashboard/book-session");
+              } else {
+                handleOpenModal("signin", "/dashboard/book-session");
+              }
+            }}
             className="text-black px-6 py-2 rounded font-semibold border-[.5px] border-gray-300 hover:border-purple-400"
           >
             Book Session
@@ -123,21 +162,29 @@ const Home: React.FC = () => {
             Home
           </a>
           <a
-            href="/dashboard"
+            href="#"
             className="text-black font-medium hover:text-blue-700"
             title="Go to Dashboard"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/dashboard"
-            className="text-black font-medium hover:text-blue-700"
+            onClick={(e) => {
+              e.preventDefault();
+              if (isAuthenticated) {
+                navigate("/dashboard");
+              } else {
+                handleOpenModal("signin", "/dashboard");
+              }
+            }}
           >
             Dashboard
           </a>
           <button
             className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold"
-            onClick={() => handleOpenModal("signin")}
+            onClick={() => {
+              if (isAuthenticated) {
+                navigate("/dashboard/book-session");
+              } else {
+                handleOpenModal("signin", "/dashboard/book-session");
+              }
+            }}
           >
             Book Session
           </button>
@@ -167,13 +214,19 @@ const Home: React.FC = () => {
             <div className="flex gap-4 flex-wrap">
               <button
                 className="bg-purple-600 text-white px-6 py-2 rounded font-semibold hover:bg-purple-800"
-                onClick={() => handleOpenModal("signin")}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    navigate("/dashboard/find-tutor");
+                  } else {
+                    handleOpenModal("signin", "/dashboard/find-tutor");
+                  }
+                }}
               >
                 Find a Tutor
               </button>
               <button
                 className=" text-black px-6 py-2 rounded font-semibold border-[.5px] border-gray-300 hover:border-purple-400"
-                onClick={() => handleOpenModal("signin")}
+                onClick={() => handleOpenModal("signup")}
                 title="Sign in or sign up"
               >
                 Sign In / Sign Up
@@ -268,7 +321,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
               {authTab === "signin" ? (
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSignIn}>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email
@@ -299,7 +352,7 @@ const Home: React.FC = () => {
                   </button>
                 </form>
               ) : (
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSignUp}>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email
