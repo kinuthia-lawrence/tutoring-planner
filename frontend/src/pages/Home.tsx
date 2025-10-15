@@ -4,9 +4,10 @@ import {
   FaChalkboardTeacher,
   FaChartLine,
   FaTimes,
+  FaBars,
 } from "react-icons/fa";
 import { MdOutlineSmartToy } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const subjects = [
   {
@@ -41,7 +42,7 @@ const features = [
   {
     title: "AI Study Coach",
     body: "Get instant explanations, practice questions and study plans 24/7.",
-    color: "bg-purple-50",
+    color: "bg-purple-100",
     icon: <MdOutlineSmartToy className="text-purple-700 text-2xl mb-2" />,
   },
   {
@@ -64,6 +65,9 @@ const Home: React.FC = () => {
     if (redirectTo) setRedirectPath(redirectTo);
   };
   const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,25 +102,22 @@ const Home: React.FC = () => {
           <button
             className="md:hidden p-2 focus:outline-none"
             aria-label="Open menu"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            title={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <FaBars className="w-6 h-6" />
           </button>
         </div>
         {/* Center */}
         <div className="hidden md:flex md:w-1/3 justify-center gap-6">
-          <a href="/" className="text-black font-medium hover:text-blue-700">
+          <a
+            href="/"
+            className={`font-medium px-1 transition ${
+              location.pathname === "/"
+                ? "text-blue-700 border-b-2 border-purple-500"
+                : "text-black hover:text-blue-700"
+            }`}
+          >
             Home
           </a>
           <a
@@ -129,6 +130,11 @@ const Home: React.FC = () => {
                 handleOpenModal("signin", "/dashboard");
               }
             }}
+            className={`font-medium px-1 transition ${
+              location.pathname === "/dashboard"
+                ? "text-blue-700 border-b-2 border-purple-500"
+                : "text-black hover:text-blue-700"
+            }`}
             title="Go to Dashboard"
           >
             Dashboard
@@ -157,48 +163,69 @@ const Home: React.FC = () => {
           </button>
         </div>
         {/* Mobile nav buttons (none except Home/Dashboard) */}
-        <div className="flex flex-col gap-2 mt-2 md:hidden">
-          <a href="/" className="text-black font-medium hover:text-blue-700">
-            Home
-          </a>
-          <a
-            href="#"
-            className="text-black font-medium hover:text-blue-700"
-            title="Go to Dashboard"
-            onClick={(e) => {
-              e.preventDefault();
-              if (isAuthenticated) {
-                navigate("/dashboard");
-              } else {
-                handleOpenModal("signin", "/dashboard");
-              }
-            }}
-          >
-            Dashboard
-          </a>
-          <button
-            className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold"
-            onClick={() => {
-              if (isAuthenticated) {
-                navigate("/dashboard/book-session");
-              } else {
-                handleOpenModal("signin", "/dashboard/book-session");
-              }
-            }}
-          >
-            Book Session
-          </button>
-          <button
-            className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
-            onClick={() => handleOpenModal("signin")}
-            title="Sign in to your account"
-          >
-            Sign In
-          </button>
-        </div>
+        {mobileMenuOpen && (
+          <div className="flex flex-col gap-2 mt-2 md:hidden bg-white shadow rounded-lg p-4 absolute top-14 left-4 right-4 z-40">
+            <a
+              href="/"
+              className="text-black font-medium hover:text-blue-700"
+              title="Go to Home"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </a>
+            <a
+              href="#"
+              className="text-black font-medium hover:text-blue-700"
+              title="Go to Dashboard"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                if (isAuthenticated) {
+                  navigate("/dashboard");
+                } else {
+                  handleOpenModal("signin", "/dashboard");
+                }
+              }}
+            >
+              Dashboard
+            </a>
+            <button
+              className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 font-semibold"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (isAuthenticated) {
+                  navigate("/dashboard/book-session");
+                } else {
+                  handleOpenModal("signin", "/dashboard/book-session");
+                }
+              }}
+              title="Book a session"
+            >
+              Book Session
+            </button>
+            <button
+              className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 font-semibold"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleOpenModal("signin");
+              }}
+              title="Sign in to your account"
+            >
+              Sign In
+            </button>
+          </div>
+        )}
       </nav>
       {/* Body */}
-      <main className="flex-1 w-full px-4 py-12 md:py-2 max-w-7xl mx-auto">
+      <main className="flex-1 w-full px-4 py-6 max-w-7xl mx-auto">
+        <button
+          disabled
+          className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-700 text-xs font-semibold shadow-sm cursor-not-allowed"
+          title="New AI Tutor platform"
+        >
+          <span className="inline-block w-2 h-2 rounded-full bg-purple-600"></span>
+          New AI Tutor platform
+        </button>
         {/* Section 1 */}
         <section className="flex flex-col md:flex-row gap-8 md:gap-4 items-center mb-5 md:mb-4 min-h-[60vh] md:min-h-[50vh]">
           {/* Column 1 */}
@@ -267,14 +294,7 @@ const Home: React.FC = () => {
             ))}
           </div>
         </section>
-        {/* Study with Nova (AI Assistant Button) */}
-        <button
-          className="fixed bottom-12 right-4 z-50 bg-purple-700 text-white p-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-purple-800 focus:outline-none"
-          aria-label="Open AI Assistant"
-          title="Open AI Assistant"
-        >
-          <FaRobot className="text-sm" /> Study with Nova
-        </button>
+
         {/* Auth Modal */}
         {showAuthModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 backdrop-blur-sm">
@@ -409,6 +429,69 @@ const Home: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Chat Assistant Section */}
+        {showChat && (
+          <div className="fixed bottom-24 right-4 z-50 w-full max-w-xs md:max-w-sm">
+            <div className="bg-white rounded-2xl shadow-2xl border border-purple-200 p-4 flex flex-col h-80">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 font-bold text-purple-700">
+                  <FaRobot className="text-xl" /> Nova Assistant
+                </div>
+                <button
+                  className="text-gray-400 hover:text-purple-700 transition"
+                  onClick={() => setShowChat(false)}
+                  aria-label="Close chat"
+                  title="Close chat"
+                >
+                  <FaTimes className="text-lg" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto text-sm text-gray-700 px-1 py-2">
+                <div className="mb-2 flex items-start gap-2">
+                  <FaRobot className="text-purple-400 mt-1" />
+                  <div className="bg-purple-50 border border-purple-100 rounded-lg px-3 py-2">
+                    Hi! I’m Nova, your AI study assistant. How can I help you
+                    today?
+                  </div>
+                </div>
+                {/* Placeholder for future chat messages */}
+              </div>
+              <form
+                className="flex items-center gap-2 mt-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // Placeholder for sending a message
+                }}
+              >
+                <input
+                  type="text"
+                  className="flex-1 px-3 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none text-sm"
+                  placeholder="Type your message…"
+                  disabled
+                />
+                <button
+                  type="submit"
+                  className="bg-purple-700 text-white px-3 py-2 rounded-lg font-semibold hover:bg-purple-800 transition disabled:opacity-60"
+                  disabled
+                  title="Send (coming soon)"
+                >
+                  Send
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Floating AI Assistant Button */}
+        <button
+          className="fixed bottom-12 right-4 z-50 bg-purple-700 text-white p-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-purple-800 focus:outline-none"
+          aria-label="Open AI Assistant"
+          title="Open AI Assistant"
+          onClick={() => setShowChat(true)}
+        >
+          <FaRobot className="text-sm" /> Study with Nova
+        </button>
       </main>
       {/* Features, Pricing, FAQ Sections (scrollable) */}
       <section id="pricing" className="w-full px-4 py-12 max-w-6xl mx-auto">
