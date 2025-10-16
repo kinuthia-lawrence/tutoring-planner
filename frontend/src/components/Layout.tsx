@@ -12,7 +12,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col h-screen bg-gray-100">
       {/* Main content area */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - responsive */}
@@ -22,7 +22,7 @@ const Layout = () => {
             transition-all duration-300 ease-in-out
             ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
             fixed md:relative z-30 h-[100vh] 
-            bg-white dark:bg-gray-950 shadow-lg
+            bg-white 
           `}
         >
           {/* Pass toggleSidebar function to Sidebar component */}

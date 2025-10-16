@@ -1,4 +1,4 @@
-import { FaTachometerAlt, FaBookOpen, FaUserFriends, FaBell, FaChartLine, FaRobot, FaUniversalAccess } from "react-icons/fa";
+import { FaBookOpen, FaChartLine, FaRobot, FaTachometerAlt, FaUniversalAccess, FaUserFriends } from "react-icons/fa";
 
 export const navItems = [
   { label: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
@@ -11,11 +11,6 @@ export const navItems = [
     label: "Find Tutor",
     icon: <FaUserFriends />,
     path: "/dashboard/find-tutor",
-  },
-  {
-    label: "Notifications",
-    icon: <FaBell />,
-    path: "/dashboard/notifications",
   },
   {
     label: "Progress",

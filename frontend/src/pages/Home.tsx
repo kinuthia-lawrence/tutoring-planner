@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   FaRobot,
   FaChalkboardTeacher,
@@ -8,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { MdOutlineSmartToy } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
+import { login } from "../services/authService";
 
 const subjects = [
   {
@@ -53,9 +55,17 @@ const features = [
 ];
 const Home: React.FC = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const user = localStorage.getItem("user");
+    return !!user;
+  });
   const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState("");
   const handleCloseModal = () => setShowAuthModal(false);
   const handleOpenModal = (tab: "signin" | "signup", redirectTo?: string) => {
     setAuthTab(tab);
@@ -66,24 +76,44 @@ const Home: React.FC = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const handleSignIn = (e: React.FormEvent) => {
+
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ... logic
-    setIsAuthenticated(true);
-    setShowAuthModal(false);
-    if (redirectPath) {
-      navigate(redirectPath);
-      setRedirectPath(null);
+    try {
+      console.log("Attempting login with:", { email: loginEmail, password: loginPassword });
+      await login({ email: loginEmail, password: loginPassword });
+      setIsAuthenticated(true);
+      setShowAuthModal(false);
+      setLoginEmail("");
+      setLoginPassword("");
+      toast.success("Login successful!");
+      if (redirectPath) {
+        navigate(redirectPath);
+        setRedirectPath(null);
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "message" in err) {
+        toast.error((err as { message: string }).message);
+      } else {
+        toast.error("Login failed");
+      }
     }
   };
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    // ... logic
+    // ... logic for registration (add validation as needed)
     setIsAuthenticated(true);
     setShowAuthModal(false);
+    setSignupEmail("");
+    setSignupPassword("");
+    setSignupConfirmPassword("");
     if (redirectPath) {
       navigate(redirectPath);
       setRedirectPath(null);
+    } else {
+      navigate("/dashboard");
     }
   };
 
@@ -348,6 +378,9 @@ const Home: React.FC = () => {
                       title="Email"
                       className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-200 focus:outline-none transition"
                       placeholder="Enter your email"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      required
                     />
                   </div>
                   <div>
@@ -359,6 +392,9 @@ const Home: React.FC = () => {
                       title="Password"
                       className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-200 focus:outline-none transition"
                       placeholder="Enter your password"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      required
                     />
                   </div>
                   <button
@@ -379,6 +415,9 @@ const Home: React.FC = () => {
                       title="Email"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Enter your email"
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                      required
                     />
                   </div>
                   <div>
@@ -390,6 +429,9 @@ const Home: React.FC = () => {
                       title="Password"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Create a password"
+                      value={signupPassword}
+                      onChange={(e) => setSignupPassword(e.target.value)}
+                      required
                     />
                   </div>
                   <div>
@@ -401,6 +443,9 @@ const Home: React.FC = () => {
                       title="Confirm Password"
                       className="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-200 focus:outline-none transition"
                       placeholder="Confirm your password"
+                      value={signupConfirmPassword}
+                      onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                      required
                     />
                   </div>
                   <div>

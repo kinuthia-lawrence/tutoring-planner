@@ -1,14 +1,17 @@
-// Color palette for this project: white, blue, black, purple (no gradients)
-// Author: [Your Last, First Name], Student ID: [Your Student ID]
-
 // USER entity
 export interface User {
-	user_id: number;
+	name?: string;
+	user_id?: number;
 	email: string;
-	password_hash: string;
+	password_hash?: string;
 	role: 'student' | 'tutor' | string;
 	created_at: string; // ISO datetime string
 	verified: boolean;
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
 }
 
 // PROFILE entity

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { FaRobot } from "react-icons/fa";
 import { navItems } from "../constants/dashboardNav";
@@ -11,7 +11,21 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
   const location = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const userData = { name: "Student", role: "student" };
+  const [userData, setUserData] = useState({ name: "Guest", role: "guest" });
+  useEffect(() => {
+    const stored = localStorage.getItem("tutornova_user");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setUserData({
+          name: parsed.name || parsed.email?.split("@")[0] || "User",
+          role: parsed.role || "student",
+        });
+      } catch {
+        // fallback to guest
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -45,7 +59,7 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed md:relative h-full md:h-screen min-h-screen flex flex-col bg-white dark:bg-gray-950 shadow-xl overflow-y-auto z-30
+        className={`fixed md:relative h-full md:h-screen min-h-screen flex flex-col bg-white shadow-xl overflow-y-auto z-30
           transition-all duration-300 ease-in-out transform
           ${
             isOpen
@@ -54,18 +68,18 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
           }`}
       >
         {/* Logo area */}
-        <div className="relative h-16 flex items-center justify-center border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
+        <div className="relative h-16 flex items-center justify-center border-b border-gray-200 bg-white overflow-hidden">
           <div className="absolute inset-x-0 bottom-0 h-px bg-blue-500" />
           {isOpen ? (
             <div className="flex items-center px-6">
-              <FaRobot className="h-6 w-6 text-blue-500 dark:text-blue-400 mr-2" />
-              <span className="text-xl font-semibold text-gray-800 dark:text-white">
+              <FaRobot className="h-6 w-6 text-blue-500 mr-2" />
+              <span className="text-xl font-semibold text-gray-800">
                 TutorNova
               </span>
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <FaRobot className="h-7 w-7 text-blue-500 dark:text-blue-400" />
+              <FaRobot className="h-7 w-7 text-blue-500" />
             </div>
           )}
         </div>
@@ -86,8 +100,8 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
                       flex items-center px-3 py-3 rounded-lg group relative overflow-hidden
                       ${
                         isActive
-                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                          : "text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800/50"
+                          ? "bg-blue-50 text-blue-700"
+                          : "text-gray-700 hover:bg-gray-100"
                       }
                       transition-all duration-200
                     `}
@@ -105,20 +119,20 @@ const Sidebar = ({ isOpen, toggleSidebar = () => {} }: SidebarProps) => {
           </ul>
         </nav>
         {/* Footer area */}
-        <div className="border-t border-gray-200 dark:border-gray-800 mt-auto">
+        <div className="border-t border-gray-200 mt-auto">
           <div className={`p-4 ${isOpen ? "px-4" : "px-2"}`}>
             {isOpen ? (
-              <div className="flex items-center p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <div className="flex items-center p-2 bg-gray-100 rounded-lg">
                 <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
                   <span className="font-medium text-white text-sm">
                     {userData?.name ? userData.name.charAt(0).toUpperCase() : "U"}
                   </span>
                 </div>
                 <div className="ml-3">
-                  <p className="font-medium text-gray-800 dark:text-white text-sm">
+                  <p className="font-medium text-gray-800 text-sm">
                     {userData.name}
                   </p>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs">
+                  <p className="text-gray-500 text-xs">
                     {userData.role.toUpperCase()}
                   </p>
                 </div>

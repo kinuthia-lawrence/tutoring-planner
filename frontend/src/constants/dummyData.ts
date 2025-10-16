@@ -13,7 +13,7 @@ export const users: User[] = [
   {
     user_id: 1,
     email: "alice@example.com",
-    password_hash: "hashedpassword1",
+    password_hash: "password",
     role: "student",
     created_at: "2025-10-01T10:00:00Z",
     verified: true,
@@ -21,7 +21,7 @@ export const users: User[] = [
   {
     user_id: 2,
     email: "bob@example.com",
-    password_hash: "hashedpassword2",
+    password_hash: "password",
     role: "tutor",
     created_at: "2025-10-02T11:00:00Z",
     verified: true,

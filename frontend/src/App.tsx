@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -13,16 +15,29 @@ import Layout from "./components/Layout";
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        aria-label="Notification"
+      />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="study-plans" element={<StudyPlans />} />
-          <Route path="find-tutor" element={<FindTutor />} />
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="progress" element={<Progress />} />
-          <Route path="ai-assistant" element={<AIAssistant />} />
-          <Route path="accessibility" element={<Accessibility />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="study-plans" element={<StudyPlans />} />
+            <Route path="find-tutor" element={<FindTutor />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="progress" element={<Progress />} />
+            <Route path="ai-assistant" element={<AIAssistant />} />
+            <Route path="accessibility" element={<Accessibility />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
